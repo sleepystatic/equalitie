@@ -138,7 +138,7 @@ img {
 /* Logo */
 .logo-center {
     position: absolute;
-    left: 50%;
+    left: 49%;
     transform: translateX(-50%);
 }
 
@@ -1139,13 +1139,14 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .page-title {
-        padding-top: 5rem;
+
+    .hero-logo {
+        max-width: 200px;  /* Smaller on mobile */
+        width: 80%;        /* Or adjust width percentage */
     }
 
-    .logo-center {
-        position: static;
-        transform: none;
+    .page-title {
+        padding-top: 5rem;
     }
 
     .header-container {
