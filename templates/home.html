@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Equalitie - Timeless Minimalist Clothing{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <img src="{{ url_for('static', filename='images/logo-lightNoText.jpg') }}" alt="Equalitie" class="hero-logo logo-light">
+        <img src="{{ url_for('static', filename='images/logo-darkNoText.jpg') }}" alt="Equalitie" class="hero-logo logo-dark">
+
+
+        <div class="discount-cta">
+            <span class="discount-text">60% OFF</span>
+        </div>
+        <p class="hero-subtitle">SITE WIDE</p>
+        <a href="{{ url_for('main.shop') }}" class="hero-btn">SHOP NOW</a>
+    </div>
+</section>
+
+<!-- Featured Collections -->
+<section class="collections">
+    <a href="{{ url_for('main.shop', category='shirts') }}" class="collection-tile">
+        <h2>SHIRTS</h2>
+    </a>
+    <a href="{{ url_for('main.shop', category='crewnecks') }}" class="collection-tile">
+        <h2>CREWNECKS</h2>
+    </a>
+</section>
+{% endblock %}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Equalitie{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="promo-banner">
+        <div class="promo-scroll">
+            <span>BLACK FRIDAY SALE • 60% OFF SITE-WIDE • FREE SHIPPING • </span>
+            <span>BLACK FRIDAY SALE • 60% OFF SITE-WIDE • FREE SHIPPING • </span>
+            <span>BLACK FRIDAY SALE • 60% OFF SITE-WIDE • FREE SHIPPING • </span>
+        </div>
+    </div>
+    <!-- Header -->
+    <header id="main-header">
+        <div class="header-container">
+            <!-- Left Navigation -->
+            <nav class="nav-left">
+                <a href="{{ url_for('main.shop') }}">SHOP</a>
+                <a href="{{ url_for('main.about') }}">ABOUT</a>
+                <a href="{{ url_for('main.contact') }}">CONTACT</a>
+            </nav>
+
+            <!-- Center Logo -->
+            <div class="logo-center">
+                <a href="{{ url_for('main.home') }}">EQUALITI<span class="flip-letter">E</span></a>  <!-- Keep as text -->
+            </div>
+
+            <!-- Right Navigation + Icons -->
+            <nav class="nav-right">
+                <a href="{{ url_for('main.size_guide') }}">SIZE GUIDE</a>
+                <a href="{{ url_for('main.returns') }}">RETURNS</a>
+
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" aria-label="Toggle dark mode">
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                <!-- Cart Icon -->
+                <button id="cart-toggle" aria-label="Open cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>EQUALITIE</h3>
+                    <p>Timeless minimalist clothing</p>
+                </div>
+                <div class="footer-section">
+                    <h4>CUSTOMER SERVICE</h4>
+                    <div class="footer-links">
+                        <a href="{{ url_for('main.contact') }}">Contact</a>
+                        <a href="{{ url_for('main.size_guide') }}">Size Guide</a>
+                        <a href="{{ url_for('main.returns') }}">Returns</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>NEWSLETTER</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="EMAIL" required>
+                        <button type="submit">→</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 EQUALITIE. ALL RIGHTS RESERVED.</p>
+                <p>Designed by <a href="https://staticdesigns.dev/" target="_blank">Static Designs LLC</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-overlay"></div>
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>CART (<span id="cart-sidebar-count">0</span>)</h2>
+                <button id="cart-close" aria-label="Close cart">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="cart-items-container" class="cart-items">
+                <!-- Cart items will be inserted here by JavaScript -->
+            </div>
+
+            <div id="cart-empty" class="cart-empty" style="display: none;">
+                <p>Your cart is empty</p>
+            </div>
+
+            <div id="cart-summary" class="cart-summary">
+                <div class="cart-total">
+                    <div class="total-row">
+                        <span>SUBTOTAL</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <p class="shipping-note">Free shipping on all orders</p>
+                </div>
+                <a href="{{ url_for('checkout.checkout') }}" class="checkout-btn">CHECKOUT</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Quick View Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="modal-grid">
+                <div class="modal-image">
+                    <img id="modal-product-image" src="" alt="">
+                </div>
+
+                <div class="modal-details">
+                    <h2 id="modal-product-name"></h2>
+                    <p id="modal-product-price" class="modal-price"></p>
+                    <p id="modal-product-description" class="modal-description"></p>
+
+                    <div class="size-selector">
+                        <p>SELECT SIZE</p>
+                        <div id="modal-size-options" class="size-options"></div>
+                    </div>
+
+                    <button id="modal-add-to-cart" class="add-to-cart-btn" disabled>ADD TO CART</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed - Equalitie{% endblock %}
+
+{% block content %}
+<section class="content-page">
+    <div class="content-container-small">
+        <div class="order-success">
+            <div class="success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            
+            <h1 class="page-title">ORDER CONFIRMED</h1>
+            
+            <div class="content-box">
+                <p class="order-number">Order #{{ order.order_number }}</p>
+                <p>Thank you for your order! We've sent a confirmation email to <strong>{{ order.email }}</strong></p>
+                <p>Your order will be shipped to:</p>
+                <address>
+                    {{ order.first_name }} {{ order.last_name }}<br>
+                    {{ order.address }}<br>
+                    {{ order.city }}, {{ order.state }} {{ order.zip_code }}
+                </address>
+            </div>
+
+            <div class="content-box">
+                <h2 class="section-title">ORDER SUMMARY</h2>
+                <div class="order-items">
+                    {% for item in order.get_items() %}
+                    <div class="order-item">
+                        <div>
+                            <p>{{ item.product_name }}</p>
+                            <p class="item-details">Size: {{ item.size }} × {{ item.quantity }}</p>
+                        </div>
+                        <p>${{ "%.2f"|format(item.total) }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="order-totals">
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <span>${{ "%.2f"|format(order.subtotal) }}</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Shipping</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="total-row total-final">
+                        <span>Total</span>
+                        <span>${{ "%.2f"|format(order.total) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ url_for('main.shop') }}" class="continue-shopping-btn">CONTINUE SHOPPING</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

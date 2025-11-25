@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Shop - Equalitie{% endblock %}
+
+{% block content %}
+<section class="shop-page">
+    <div class="shop-container">
+        <h1 class="page-title">SHOP</h1>
+        
+        <!-- Collection Filter -->
+        <div class="collection-filter">
+            <a href="{{ url_for('main.shop', category='all') }}" class="filter-btn {% if current_category == 'all' %}active{% endif %}">ALL</a>
+            <a href="{{ url_for('main.shop', category='shirts') }}" class="filter-btn {% if current_category == 'shirts' %}active{% endif %}">SHIRTS</a>
+            <a href="{{ url_for('main.shop', category='crewnecks') }}" class="filter-btn {% if current_category == 'crewnecks' %}active{% endif %}">CREWNECKS</a>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card fade-in-up" data-product-id="{{ product.id }}">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='images/' + product.get_main_image()) }}" alt="{{ product.name }}">
+                </div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-price">
+                    <span class="original-price">${{ "%.2f"|format(product.price) }}</span>
+                    <span class="sale-price">${{ "%.2f"|format(product.price * 0.40) }}</span>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

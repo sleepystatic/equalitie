@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Equalitie{% endblock %}
+
+{% block content %}
+<section class="content-page">
+    <div class="content-container-small">
+        <h1 class="page-title">CONTACT</h1>
+        <div class="content-box">
+            <form id="contact-form" class="contact-form">
+                <div class="form-group">
+                    <label for="name">NAME</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">EMAIL</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">MESSAGE</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">SEND MESSAGE</button>
+            </form>
+            <div id="contact-success" class="form-message" style="display: none;">
+                <p>Thank you for your message! We'll get back to you soon.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('{{ url_for("main.contact") }}', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams(data)
+        });
+        
+        if (response.ok) {
+            e.target.style.display = 'none';
+            document.getElementById('contact-success').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+</script>
+{% endblock %}

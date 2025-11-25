@@ -1,0 +1,96 @@
+from flask import Flask, session
+from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'production_fallback_only')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///store.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+
+# Stripe configuration - now from environment
+app.config['STRIPE_PUBLIC_KEY'] = os.getenv('STRIPE_PUBLIC_KEY')
+app.config['STRIPE_SECRET_KEY'] = os.getenv('STRIPE_SECRET_KEY')
+
+# Initialize database
+from models import db
+
+db.init_app(app)
+
+# Register blueprints
+from routes.main import main_bp
+from routes.cart import cart_bp
+from routes.checkout import checkout_bp
+
+app.register_blueprint(main_bp)
+app.register_blueprint(cart_bp, url_prefix='/cart')
+app.register_blueprint(checkout_bp, url_prefix='/checkout')
+
+# Create database tables
+with app.app_context():
+    db.create_all()
+
+    # Add sample products if database is empty
+    from models import Product
+
+    if Product.query.count() == 0:
+        sample_products = [
+            # Shirts
+            Product(
+                name='Essential Tee',
+                category='shirts',
+                price=50.00,
+                description='Classic essential tee crafted from premium cotton.',
+                images=['shirt-1.jpg', 'shirt-1-alt.jpg'],
+                sizes=['M', 'L', 'XL'],
+                stock=50
+            ),
+            Product(
+                name='Classic Crew',
+                category='shirts',
+                price=50.00,
+                description='Timeless crew neck design for everyday wear.',
+                images=['shirt-2.jpg', 'shirt-2-alt.jpg'],
+                sizes=['M', 'L', 'XL'],
+                stock=50
+            ),
+            Product(
+                name='Premium Cotton Tee',
+                category='shirts',
+                price=50.00,
+                description='Ultra-soft premium cotton tee with modern fit.',
+                images=['shirt-3.jpg', 'shirt-3-alt.jpg'],
+                sizes=['M', 'L', 'XL'],
+                stock=50
+            ),
+            Product(
+                name='Pocket Tee',
+                category='shirts',
+                price=50.00,
+                description='Classic pocket tee with attention to detail.',
+                images=['shirt-5.jpg', 'shirt-5-alt.jpg'],
+                sizes=['M', 'L', 'XL'],
+                stock=50
+            ),
+            # Crewnecks
+            Product(
+                name='Classic Crewneck',
+                category='crewnecks',
+                price=75.00,
+                description='Essential crewneck sweatshirt in heavyweight fabric.',
+                images=['crew-1.jpg', 'crew-1-alt.jpg'],
+                sizes=['M', 'L', 'XL'],
+                stock=30
+            ),
+        ]
+
+        for product in sample_products:
+            db.session.add(product)
+        db.session.commit()
+        print("Sample products added to database!")
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
