@@ -3,6 +3,8 @@ from datetime import timedelta
 import os
 from dotenv import load_dotenv
 
+app = Flask(__name__)
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -14,6 +16,9 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 # Stripe configuration - now from environment
 app.config['STRIPE_PUBLIC_KEY'] = os.getenv('STRIPE_PUBLIC_KEY')
 app.config['STRIPE_SECRET_KEY'] = os.getenv('STRIPE_SECRET_KEY')
+
+print(f"Stripe Public Key: {app.config['STRIPE_PUBLIC_KEY'][:10]}...")  # Shows first 10 chars
+
 
 # Initialize database
 from models import db
@@ -40,7 +45,7 @@ with app.app_context():
         sample_products = [
             # Shirts
             Product(
-                name='Essential Tee',
+                name='Equali-Tee',
                 category='shirts',
                 price=50.00,
                 description='Classic essential tee crafted from premium cotton.',
@@ -49,7 +54,7 @@ with app.app_context():
                 stock=50
             ),
             Product(
-                name='Classic Crew',
+                name='Green/Beige Polo',
                 category='shirts',
                 price=50.00,
                 description='Timeless crew neck design for everyday wear.',
@@ -58,7 +63,7 @@ with app.app_context():
                 stock=50
             ),
             Product(
-                name='Premium Cotton Tee',
+                name='Black/Green Polo',
                 category='shirts',
                 price=50.00,
                 description='Ultra-soft premium cotton tee with modern fit.',
@@ -67,7 +72,7 @@ with app.app_context():
                 stock=50
             ),
             Product(
-                name='Pocket Tee',
+                name='Black/Beige Polo',
                 category='shirts',
                 price=50.00,
                 description='Classic pocket tee with attention to detail.',
@@ -77,7 +82,7 @@ with app.app_context():
             ),
             # Crewnecks
             Product(
-                name='Classic Crewneck',
+                name='Equalitie Crewneck',
                 category='crewnecks',
                 price=75.00,
                 description='Essential crewneck sweatshirt in heavyweight fabric.',

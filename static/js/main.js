@@ -101,7 +101,7 @@ function updateCartDisplay(data) {
         cartItemsContainer.innerHTML = items.map(item => `
             <div class="cart-item" data-item-id="${item.id}">
                 <div class="cart-item-header">
-                    <span class="cart-item-name">${item.product.name}</span>
+                    <span class="cart-item-name">${item.product.name} * ${item.quantity}</span>
                     <button class="remove-item" onclick="removeFromCart(${item.id})">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -291,16 +291,19 @@ const newsletterForm = document.querySelector('.newsletter-form');
 if (newsletterForm) {
     newsletterForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const email = newsletterForm.querySelector('input').value;
 
-        // TODO: Implement newsletter signup
-        console.log('Newsletter signup:', email);
+        // Show coming soon message
+        const button = newsletterForm.querySelector('button');
+        const originalText = button.innerHTML;
+        button.innerHTML = 'COMING SOON!';
+        button.style.opacity = '0.6';
 
-        // Clear form
-        newsletterForm.reset();
-
-        // Show confirmation (you can customize this)
-        alert('Thank you for subscribing!');
+        // Reset after 3 seconds
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.opacity = '1';
+            newsletterForm.reset();
+        }, 3000);
     });
 }
 
