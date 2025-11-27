@@ -48,7 +48,7 @@ with app.app_context():
                 name='Equali-Tee',
                 category='shirts',
                 price=50.00,
-                description='Classic essential tee crafted from premium cotton.',
+                description='',
                 images=['shirt-1.jpg', 'shirt-1-alt.jpg'],
                 sizes=['M', 'L', 'XL'],
                 stock=50
@@ -57,7 +57,7 @@ with app.app_context():
                 name='Green/Beige Polo',
                 category='shirts',
                 price=50.00,
-                description='Timeless crew neck design for everyday wear.',
+                description='',
                 images=['shirt-2.jpg', 'shirt-2-alt.jpg'],
                 sizes=['M', 'L', 'XL'],
                 stock=50
@@ -66,7 +66,7 @@ with app.app_context():
                 name='Black/Green Polo',
                 category='shirts',
                 price=50.00,
-                description='Ultra-soft premium cotton tee with modern fit.',
+                description='',
                 images=['shirt-3.jpg', 'shirt-3-alt.jpg'],
                 sizes=['M', 'L', 'XL'],
                 stock=50
@@ -75,7 +75,16 @@ with app.app_context():
                 name='Black/Beige Polo',
                 category='shirts',
                 price=50.00,
-                description='Classic pocket tee with attention to detail.',
+                description='',
+                images=['shirt-4.jpg', 'shirt-4-alt.jpg'],
+                sizes=['M', 'L', 'XL'],
+                stock=50
+            ),
+            Product(
+                name='White/Beige Polo',
+                category='shirts',
+                price=50.00,
+                description='',
                 images=['shirt-5.jpg', 'shirt-5-alt.jpg'],
                 sizes=['M', 'L', 'XL'],
                 stock=50
@@ -85,7 +94,7 @@ with app.app_context():
                 name='Equalitie Crewneck',
                 category='crewnecks',
                 price=75.00,
-                description='Essential crewneck sweatshirt in heavyweight fabric.',
+                description='',
                 images=['crew-1.jpg', 'crew-1-alt.jpg'],
                 sizes=['M', 'L', 'XL'],
                 stock=30
