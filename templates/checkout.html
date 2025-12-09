@@ -118,16 +118,28 @@
 <script>
 const stripe = Stripe('{{ stripe_public_key }}');
 const elements = stripe.elements();
+
+// Check current theme from localStorage
+const savedTheme = localStorage.getItem('theme');
+const isDarkMode = savedTheme === 'dark';
+
 const cardElement = elements.create('card', {
     style: {
         base: {
             fontSize: '16px',
-            color: '#000',
-            '::placeholder': { color: '#aab7c4' }
+            color: isDarkMode ? '#ffffff' : '#000000',
+            '::placeholder': {
+                color: isDarkMode ? '#999999' : '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a'
         }
     }
 });
+
 cardElement.mount('#card-element');
+
 cardElement.on('change', function(event) {
     const displayError = document.getElementById('card-errors');
     displayError.textContent = event.error ? event.error.message : '';
@@ -143,12 +155,10 @@ document.getElementById('place-order-btn').addEventListener('click', async () =>
         return;
     }
 
-    // Disable button
     btn.disabled = true;
     btn.textContent = 'PROCESSING...';
 
     try {
-        // Create payment method
         const {paymentMethod, error} = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
@@ -168,7 +178,6 @@ document.getElementById('place-order-btn').addEventListener('click', async () =>
             throw new Error(error.message);
         }
 
-        // Send to backend
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
         data.payment_method_id = paymentMethod.id;

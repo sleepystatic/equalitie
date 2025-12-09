@@ -12,15 +12,21 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/favicon-64x64.png') }}">
+    <link rel="apple-touch-icon"href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+
     <title>{% block title %}Equalitie{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="promo-banner">
         <div class="promo-scroll">
-            <span>BLACK FRIDAY SALE • 60% OFF SITE-WIDE • FREE SHIPPING • </span>
-            <span>BLACK FRIDAY SALE • 60% OFF SITE-WIDE • FREE SHIPPING • </span>
-            <span>BLACK FRIDAY SALE • 60% OFF SITE-WIDE • FREE SHIPPING • </span>
+            <span>60% OFF SITE-WIDE • FREE SHIPPING • </span>
+            <span>60% OFF SITE-WIDE • FREE SHIPPING • </span>
+            <span>60% OFF SITE-WIDE • FREE SHIPPING • </span>
+            <span>60% OFF SITE-WIDE • FREE SHIPPING • </span>
         </div>
     </div>
     <!-- Header -->

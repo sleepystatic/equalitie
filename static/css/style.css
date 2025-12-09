@@ -225,10 +225,11 @@ main {
 }
 
 .hero-logo {
-    max-width: 400px;  /* Adjust size */
+    max-width: 300px;  /* Adjust size */
     width: 95%;
     height: auto;
     margin-bottom: 0 auto 2rem auto;
+    margin-left: 42px;
 }
 
 .flip-letter {
@@ -262,6 +263,7 @@ body.dark-mode .hero-logo.logo-light {
     color: transparent;
     transition: color 0.3s;
     display: inline-block;
+    margin-bottom: -10rem;
 }
 
 .discount-text:hover {
@@ -271,7 +273,7 @@ body.dark-mode .hero-logo.logo-light {
 .hero-subtitle {
     font-size: clamp(1.5rem, 3vw, 2.5rem);
     letter-spacing: 0.3em;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     text-shadow: 2px 2px 4px var(--shadow-color);
 }
 
@@ -281,6 +283,9 @@ body.dark-mode .hero-logo.logo-light {
     padding: 1rem 3rem;
     letter-spacing: 0.2em;
     transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 2rem;
+
+
 }
 
 .hero-btn:hover {
@@ -1157,12 +1162,13 @@ footer {
 
     .hero-logo {
         max-width: 200px;  /* Smaller on mobile */
-        width: 80%;    /* Or adjust width percentage */
+        width: 100%;    /* Or adjust width percentage */
         height: auto;
         margin: 0 auto 2rem auto;
         display: block;
         position: relative;
-        top: 30px;
+        top: 50px;
+        margin-left: 2px;
     }
 
     .page-title {
@@ -1202,6 +1208,25 @@ footer {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
+
+    .hero-subtitle {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    letter-spacing: 0.3em;
+    margin-bottom: 3rem;
+    text-shadow: 2px 2px 4px var(--shadow-color);
+    }
+
+    .discount-text {
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: 0.3em;
+    font-weight: 700;
+    -webkit-text-stroke: 2px var(--text-color);
+    color: transparent;
+    transition: color 0.3s;
+    display: inline-block;
+    margin-bottom: -8rem;
+    }
+
 }
 
 .original-price {
