@@ -54,3 +54,36 @@ def size_guide():
 @main_bp.route('/returns')
 def returns():
     return render_template('returns.html')
+@main_bp.route('/admin/orders')
+def admin_orders():
+    """View all orders - basic auth protected"""
+    import os
+    from flask import request, Response
+    from models import Order
+
+    # Check for Basic Authentication
+    auth = request.authorization
+
+    correct_username = os.getenv('ADMIN_USERNAME')
+    correct_password = os.getenv('ADMIN_PASSWORD')
+
+    if not auth or auth.username != correct_username or auth.password != correct_password:
+        return Response(
+            'Access denied', 401,
+            {'WWW-Authenticate': 'Basic realm="Admin Area"'}
+        )
+
+    orders = Order.query.order_by(Order.created_at.desc()).all()
+
+    html = "<h1>Orders</h1>"
+    for order in orders:
+        html += f"<div style='border:1px solid #ccc; padding:10px; margin:10px;'>"
+        html += f"<strong>{order.order_number}</strong><br>"
+        html += f"Customer: {order.first_name} {order.last_name}<br>"
+        html += f"Email: {order.email}<br>"
+        html += f"Total: ${order.total:.2f}<br>"
+        html += f"Status: {order.payment_status}<br>"
+        html += f"Date: {order.created_at}<br>"
+        html += "</div>"
+
+    return html

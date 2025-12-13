@@ -82,7 +82,7 @@ def process_checkout():
         # Generate unique order number
         order_number = f"EQ{datetime.now().strftime('%Y%m%d')}{uuid.uuid4().hex[:8].upper()}"
 
-        # CHARGE THE CARD
+        # CHARGE THE CARD - THIS IS THE CRITICAL PART
         try:
             payment_intent = stripe.PaymentIntent.create(
                 amount=int(subtotal * 100),  # Convert to cents
@@ -101,15 +101,28 @@ def process_checkout():
                 }
             )
 
+            # CRITICAL SECURITY CHECK
             if payment_intent.status != 'succeeded':
-                return jsonify({'success': False, 'message': 'Payment failed'}), 400
+                return jsonify({
+                    'success': False,
+                    'message': f'Payment was not successful. Status: {payment_intent.status}'
+                }), 400
 
         except stripe.error.CardError as e:
-            return jsonify({'success': False, 'message': f'Card declined: {e.user_message}'}), 400
-        except stripe.error.StripeError as e:
-            return jsonify({'success': False, 'message': f'Payment error: {str(e)}'}), 400
+            # Card was declined
+            return jsonify({
+                'success': False,
+                'message': f'Your card was declined: {e.user_message}'
+            }), 400
 
-        # Create order
+        except stripe.error.StripeError as e:
+            # Other Stripe errors
+            return jsonify({
+                'success': False,
+                'message': f'Payment error: {str(e)}'
+            }), 400
+
+        # ONLY CREATE ORDER IF PAYMENT SUCCEEDED
         order = Order(
             order_number=order_number,
             email=data['email'],
@@ -128,7 +141,7 @@ def process_checkout():
 
         db.session.add(order)
 
-        # Clear cart
+        # Clear cart after successful payment
         for item in cart_items:
             db.session.delete(item)
 
@@ -146,8 +159,6 @@ def process_checkout():
         traceback.print_exc()
         print(f"Checkout error: {str(e)}")
         return jsonify({'success': False, 'message': 'An error occurred. Please try again.'}), 500
-
-
 @checkout_bp.route('/success/<order_number>')
 def order_success(order_number):
     """Display order success page"""
