@@ -1,0 +1,92 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Order {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<section class="admin-section">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+        <h2>Order {{ order.order_number }}</h2>
+        <span class="status-badge {{ order.payment_status }}">{{ order.payment_status }}</span>
+    </div>
+
+    <div class="admin-card">
+        <h3>Customer Information</h3>
+        <div class="admin-row">
+            <div>
+                <dt>Name</dt>
+                <dd>{{ order.first_name }} {{ order.last_name }}</dd>
+            </div>
+            <div>
+                <dt>Email</dt>
+                <dd>{{ order.email }}</dd>
+            </div>
+            <div>
+                <dt>Order Date</dt>
+                <dd>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</dd>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h3>Shipping Address</h3>
+        <div class="admin-row">
+            <div>
+                <dt>Address</dt>
+                <dd>{{ order.address }}</dd>
+            </div>
+            <div>
+                <dt>City</dt>
+                <dd>{{ order.city }}</dd>
+            </div>
+            <div>
+                <dt>State</dt>
+                <dd>{{ order.state }}</dd>
+            </div>
+            <div>
+                <dt>ZIP</dt>
+                <dd>{{ order.zip_code }}</dd>
+            </div>
+            <div>
+                <dt>Country</dt>
+                <dd>{{ order.country }}</dd>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h3>Order Items</h3>
+        <ul class="admin-items-list">
+            {% for item in order.get_items() %}
+            <li>
+                <span>{{ item.quantity }} × {{ item.product_name }} (Size: {{ item.size }})</span>
+                <span>${{ "%.2f"|format(item.total) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="admin-card">
+        <h3>Payment Summary</h3>
+        <div class="admin-row">
+            <div>
+                <dt>Subtotal</dt>
+                <dd>${{ "%.2f"|format(order.subtotal) }}</dd>
+            </div>
+            <div>
+                <dt>Shipping</dt>
+                <dd>FREE</dd>
+            </div>
+            <div>
+                <dt>Total</dt>
+                <dd><strong>${{ "%.2f"|format(order.total) }}</strong></dd>
+            </div>
+            <div>
+                <dt>Stripe Payment Intent</dt>
+                <dd>{{ order.stripe_payment_intent or 'N/A' }}</dd>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('main.admin_orders') }}" class="admin-btn">← Back to Orders</a>
+</section>
+{% endblock %}

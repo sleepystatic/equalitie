@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} - Equalitie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .admin-body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+        .admin-header {
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-header h1 {
+            font-size: 1.25rem;
+            letter-spacing: 0.2em;
+            margin: 0;
+        }
+        .admin-nav a {
+            letter-spacing: 0.1em;
+            font-size: 0.875rem;
+            margin-left: 1.5rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .admin-nav a:hover {
+            opacity: 1;
+        }
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .admin-section {
+            margin-bottom: 3rem;
+        }
+        .admin-section h2 {
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .admin-table th,
+        .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+        .admin-table th {
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        .admin-table tr:hover td {
+            background-color: var(--placeholder-bg);
+        }
+        .admin-table a {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .status-badge.succeeded {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+        .status-badge.pending,
+        .status-badge.failed {
+            opacity: 0.6;
+        }
+        .admin-btn {
+            display: inline-block;
+            border: 2px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            letter-spacing: 0.1em;
+            font-size: 0.875rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .admin-btn:hover {
+            background-color: var(--hover-bg);
+            color: var(--hover-text);
+        }
+        .admin-card {
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .admin-card h3 {
+            font-size: 0.875rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .admin-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .admin-row dt {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+        .admin-row dd {
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        .admin-items-list {
+            list-style: none;
+            padding: 0;
+        }
+        .admin-items-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .admin-items-list li:last-child {
+            border-bottom: none;
+        }
+        .admin-empty {
+            text-align: center;
+            padding: 3rem;
+            opacity: 0.6;
+            letter-spacing: 0.05em;
+        }
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .admin-nav a {
+                margin-left: 0;
+                margin-right: 1rem;
+            }
+            .admin-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <header class="admin-header">
+        <h1>EQUALITIE ADMIN</h1>
+        <nav class="admin-nav">
+            <a href="{{ url_for('main.admin_orders') }}">Orders</a>
+            <a href="{{ url_for('main.admin_orders_export') }}">Export CSV</a>
+            <a href="{{ url_for('main.home') }}">Back to Site</a>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

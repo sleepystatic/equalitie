@@ -145,6 +145,21 @@ cardElement.on('change', function(event) {
     displayError.textContent = event.error ? event.error.message : '';
 });
 
+// Update card element styling when the user toggles light/dark mode
+window.addEventListener('themeChanged', function(event) {
+    const isDarkMode = event.detail.isDark;
+    cardElement.update({
+        style: {
+            base: {
+                color: isDarkMode ? '#ffffff' : '#000000',
+                '::placeholder': {
+                    color: isDarkMode ? '#999999' : '#aab7c4'
+                }
+            }
+        }
+    });
+});
+
 // Handle place order
 document.getElementById('place-order-btn').addEventListener('click', async () => {
     const form = document.getElementById('checkout-form');

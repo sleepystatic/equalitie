@@ -20,7 +20,7 @@ def checkout():
     subtotal = 0
 
     for item in cart_items:
-        sale_price = round(item.product.price * 0.40, 2)
+        sale_price = item.product.sale_price
         item_total = sale_price * item.quantity
 
         item_dict = {
@@ -66,7 +66,7 @@ def process_checkout():
         subtotal = 0
 
         for item in cart_items:
-            sale_price = round(item.product.price * 0.40, 2)
+            sale_price = item.product.sale_price
 
             item_data = {
                 'product_name': item.product.name,

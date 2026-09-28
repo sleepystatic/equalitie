@@ -1,7 +1,24 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, Response
 from models import db, Product
+import csv
+import io
+import os
 
 main_bp = Blueprint('main', __name__)
+
+
+def _admin_auth_required():
+    """Check HTTP Basic Auth credentials against environment variables."""
+    auth = request.authorization
+    correct_username = os.getenv('ADMIN_USERNAME')
+    correct_password = os.getenv('ADMIN_PASSWORD')
+
+    if not auth or auth.username != correct_username or auth.password != correct_password:
+        return Response(
+            'Access denied', 401,
+            {'WWW-Authenticate': 'Basic realm="Admin Area"'}
+        )
+    return None
 
 
 @main_bp.route('/')
@@ -56,34 +73,75 @@ def returns():
     return render_template('returns.html')
 @main_bp.route('/admin/orders')
 def admin_orders():
-    """View all orders - basic auth protected"""
-    import os
-    from flask import request, Response
+    """View all orders - basic auth protected."""
     from models import Order
 
-    # Check for Basic Authentication
-    auth = request.authorization
-
-    correct_username = os.getenv('ADMIN_USERNAME')
-    correct_password = os.getenv('ADMIN_PASSWORD')
-
-    if not auth or auth.username != correct_username or auth.password != correct_password:
-        return Response(
-            'Access denied', 401,
-            {'WWW-Authenticate': 'Basic realm="Admin Area"'}
-        )
+    auth_error = _admin_auth_required()
+    if auth_error:
+        return auth_error
 
     orders = Order.query.order_by(Order.created_at.desc()).all()
+    return render_template('admin/orders.html', orders=orders)
 
-    html = "<h1>Orders</h1>"
+
+@main_bp.route('/admin/orders/export')
+def admin_orders_export():
+    """Export all orders as CSV - basic auth protected."""
+    from models import Order
+
+    auth_error = _admin_auth_required()
+    if auth_error:
+        return auth_error
+
+    orders = Order.query.order_by(Order.created_at.desc()).all()
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    writer.writerow([
+        'Order Number', 'Date', 'Email', 'First Name', 'Last Name',
+        'Address', 'City', 'State', 'ZIP', 'Country', 'Items',
+        'Subtotal', 'Total', 'Payment Status', 'Stripe Payment Intent'
+    ])
+
     for order in orders:
-        html += f"<div style='border:1px solid #ccc; padding:10px; margin:10px;'>"
-        html += f"<strong>{order.order_number}</strong><br>"
-        html += f"Customer: {order.first_name} {order.last_name}<br>"
-        html += f"Email: {order.email}<br>"
-        html += f"Total: ${order.total:.2f}<br>"
-        html += f"Status: {order.payment_status}<br>"
-        html += f"Date: {order.created_at}<br>"
-        html += "</div>"
+        items_summary = ', '.join(
+            f"{item['quantity']}x {item['product_name']} ({item['size']})"
+            for item in order.get_items()
+        )
+        writer.writerow([
+            order.order_number,
+            order.created_at.strftime('%Y-%m-%d %H:%M:%S') if order.created_at else '',
+            order.email,
+            order.first_name,
+            order.last_name,
+            order.address,
+            order.city,
+            order.state,
+            order.zip_code,
+            order.country,
+            items_summary,
+            f"{order.subtotal:.2f}",
+            f"{order.total:.2f}",
+            order.payment_status,
+            order.stripe_payment_intent or ''
+        ])
 
-    return html
+    output.seek(0)
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={'Content-Disposition': 'attachment; filename=equalitie_orders.csv'}
+    )
+
+
+@main_bp.route('/admin/orders/<order_number>')
+def admin_order_detail(order_number):
+    """View a single order - basic auth protected."""
+    from models import Order
+
+    auth_error = _admin_auth_required()
+    if auth_error:
+        return auth_error
+
+    order = Order.query.filter_by(order_number=order_number).first_or_404()
+    return render_template('admin/order_detail.html', order=order)

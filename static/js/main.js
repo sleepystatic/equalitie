@@ -14,8 +14,9 @@ if (currentTheme === 'dark') {
 
 themeToggle.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
+    const isDark = body.classList.contains('dark-mode');
 
-    if (body.classList.contains('dark-mode')) {
+    if (isDark) {
         localStorage.setItem('theme', 'dark');
         moonIcon.style.display = 'none';
         sunIcon.style.display = 'block';
@@ -24,6 +25,8 @@ themeToggle.addEventListener('click', () => {
         moonIcon.style.display = 'block';
         sunIcon.style.display = 'none';
     }
+
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { isDark } }));
 });
 
 // ==================== HEADER SCROLL BEHAVIOR ====================
@@ -41,6 +44,30 @@ window.addEventListener('scroll', () => {
 
     lastScroll = currentScroll;
 });
+
+// ==================== MOBILE MENU ====================
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+const mobileMenuClose = document.getElementById('mobile-menu-close');
+const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+
+function openMobileMenu() {
+    if (!mobileMenu) return;
+    mobileMenu.classList.add('active');
+    menuToggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+    if (!mobileMenu) return;
+    mobileMenu.classList.remove('active');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+}
+
+menuToggle?.addEventListener('click', openMobileMenu);
+mobileMenuClose?.addEventListener('click', closeMobileMenu);
+mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
 
 // ==================== CART FUNCTIONALITY ====================
 const cartToggle = document.getElementById('cart-toggle');
@@ -334,6 +361,9 @@ document.addEventListener('keydown', (e) => {
         }
         if (cartSidebar.classList.contains('active')) {
             cartSidebar.classList.remove('active');
+        }
+        if (mobileMenu?.classList.contains('active')) {
+            closeMobileMenu();
         }
     }
 });

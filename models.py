@@ -8,6 +8,9 @@ db = SQLAlchemy()
 class Product(db.Model):
     __tablename__ = 'products'
 
+    # Centralized sale factor — single source of truth for the site-wide discount
+    SALE_FACTOR = 0.40
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(50), nullable=False)
@@ -37,13 +40,17 @@ class Product(db.Model):
         images = self.get_images()
         return images[0] if images else 'placeholder.jpg'
 
+    @property
+    def sale_price(self):
+        return round(self.price * self.SALE_FACTOR, 2)
+
     def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
             'category': self.category,
             'price': self.price,
-            'sale_price': round(self.price * 0.40, 2),
+            'sale_price': self.sale_price,
             'description': self.description,
             'images': self.get_images(),
             'sizes': self.get_sizes(),

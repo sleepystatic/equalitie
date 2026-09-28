@@ -107,8 +107,8 @@ def get_cart_items():
 
     for item in cart_items:
         item_dict = item.to_dict()
-        sale_price = round(item.product.price * 0.40, 2)  # ← Calculate sale price
-        item_total = sale_price * item.quantity  # ← Use sale price
+        sale_price = item.product.sale_price
+        item_total = sale_price * item.quantity
         item_dict['total'] = item_total
         items.append(item_dict)
         subtotal += item_total

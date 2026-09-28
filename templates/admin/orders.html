@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+<section class="admin-section">
+    <h2>All Orders</h2>
+
+    {% if orders %}
+    <div style="overflow-x: auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td><strong>{{ order.order_number }}</strong></td>
+                    <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ order.first_name }} {{ order.last_name }}</td>
+                    <td>{{ order.email }}</td>
+                    <td>{{ order.get_items()|length }}</td>
+                    <td>${{ "%.2f"|format(order.total) }}</td>
+                    <td>
+                        <span class="status-badge {{ order.payment_status }}">{{ order.payment_status }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('main.admin_order_detail', order_number=order.order_number) }}">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="admin-empty">No orders found.</p>
+    {% endif %}
+</section>
+{% endblock %}
